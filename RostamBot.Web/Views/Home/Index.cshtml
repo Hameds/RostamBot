@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "صفحه نخست";
+}
+
+
+
+<div class="jumbotron">
+    <h1 class="display-4">رُستَم بات</h1>
+    <p class="lead">رستم، پهلوان افسانه‌ای ایران برگشته تا به جنگ دیوهای فضای مجازی برود!</p>
+    <hr class="my-4">
+    <p>
+        به کمک رستم‌ بات، که یک بات توییتری است، در مرحله اول می‌توانید از شر اکانت‌های ناامن در شبکه اجتماعی توییتر خلاص شوید. به زودی رستم بات، در سایر شبکه‌های اجتماعی نیز حضور خواهد داشت
+
+
+    </p>
+    <p class="lead">
+        <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login" role="button">ورود با توییتر</a>
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">گزارش اکانت ناامن</h5>
+                <p class="card-text">
+                    کافی است توییتی از اکانت ناامن را نقل‌قول (Quote) کرده و یا به آن پاسخ (Reply) دهید و <code>@@RostamBot</code> را با هشتگ <code>#naamn</code> منشن کنید.
+                </p>
+                <a href="#" class="btn btn-primary">پرسش‌های متداول</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">بلاک گروهی</h5>
+                <p class="card-text">
+                    اگر با حساب توییتر خود به سایت وارد شوید، ما همه اکانت‌هایی که ناامن بودن آن‌ها تایید شده را به صورت اتوماتیک برای شما بلاک می‌کنیم.
+                    <br />
+                </p>
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">ورود با توییتر</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">تایید ناامن بودن اکانت</h5>
+                <p class="card-text">به زودی، امکان ارسال دایرکت توسط بات توییتری ما به حساب مدیران فراهم می‌شود تا فرآیند تایید ناامن بودن اکانت، سریع‌تر شود. </p>
+                <a href="https://github.com/hameds/rostambot" rel="nofollow" class="btn btn-primary">نقشه راه توسعه</a>
+            </div>
+        </div>
+    </div>
+</div>
+

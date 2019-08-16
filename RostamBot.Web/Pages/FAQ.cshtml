@@ -1,0 +1,56 @@
+﻿@page
+@{
+    ViewData["Title"] = "پرسش‌های متداول";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>پرسش‌های متداول</h1>
+<hr />
+
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#faqOne" aria-expanded="true" aria-controls="faqOne">
+                    اکانت ناامن چیست؟
+                </button>
+            </h5>
+        </div>
+
+        <div id="faqOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                اکانت‌هایی در شبکه اجتماعی توییتر، که معمولاً دنبال‌کنندگان بالا (جعلی) دارند و با انتشار مطالب جنجالی سعی در جلب توجه و کسب تعامل برای انتشار اخبار جعلی و تحریک و ایجاد واکنش دارند.
+                توضیحات بیشتر در <a href="http://shahrvand-newspaper.ir/News:NoMobile/main/168134/" rel="nofollow" target="_blank">این مطلب از روزنامه شهروند</a>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#faqTwo" aria-expanded="false" aria-controls="faqTwo">
+                    چطور یک اکانت ناامن را گزارش کنم؟
+                </button>
+            </h5>
+        </div>
+        <div id="faqTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                کافی است توییتی از اکانت ناامن را نقل‌قول (Quote) کرده و یا به آن پاسخ (Reply) دهید و <code>@@RostamBot</code> را با هشتگ <code>#naamn</code> منشن کنید.
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#faqThree" aria-expanded="false" aria-controls="faqThree">
+                    چرا رستم بات دسترسی خواندن و نوشتن توییت می‌گیرد؟
+                </button>
+            </h5>
+        </div>
+        <div id="faqThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                برنامه‌های توییتر سه سطح دسترسی فقط خواندن، خواندن و نوشتن و امکان دسترسی و ارسال دایرکت دارند. برای اینکه بتوانیم کار بلاک کردن را انجام دهیم به دسترسی خواندن و نوشتن نیاز داریم. ما هیچ کدام از توییت‌های شما را نمی‌خوانیم و هیچ‌گاه از طرف شما توییتی ارسال نمی‌کنیم.
+            </div>
+        </div>
+    </div>
+</div>
+
