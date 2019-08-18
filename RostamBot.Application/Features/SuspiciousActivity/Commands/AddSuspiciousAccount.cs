@@ -1,6 +1,7 @@
 ﻿using Araye.Code.Cqrs.Application.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using RostamBot.Application.Features.SuspiciousActivity.Models;
 using RostamBot.Application.Interfaces;
 using RostamBot.Domain.Entities;
 using System;
@@ -20,10 +21,13 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
         public class Handler : IRequestHandler<AddSuspiciousAccount, Unit>
         {
             private readonly IRostamBotDbContext _db;
+            private readonly IMediator _mediator;
 
-            public Handler(IRostamBotDbContext db)
+
+            public Handler(IRostamBotDbContext db, IMediator mediator)
             {
                 _db = db;
+                _mediator = mediator;
             }
 
             public async Task<Unit> Handle(AddSuspiciousAccount request, CancellationToken cancellationToken)
@@ -44,6 +48,20 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
                 await _db.SuspiciousAccounts.AddAsync(newSuspiciousAccount);
 
                 await _db.SaveChangesAsync(cancellationToken);
+
+                var suspiciousAccountDto = new SuspiciousAccountDto()
+                {
+                    Id = newSuspiciousAccount.Id,
+                    TwitterUserId = newSuspiciousAccount.TwitterUserId
+                };
+
+                await _mediator.Publish(
+                    new ChangeBlockStatusSaved
+                    {
+                        SuspiciousAccountDto = suspiciousAccountDto,
+                        BlockStatus = true
+                    },
+                    cancellationToken);
 
                 return Unit.Value;
             }
