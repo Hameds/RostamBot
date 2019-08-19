@@ -1,9 +1,16 @@
 ﻿@{
     ViewData["Title"] = "صفحه نخست";
 }
+@using Microsoft.AspNetCore.Identity
+@using RostamBot.Domain.Entities
+@inject SignInManager<ApplicationUser> SignInManager
 
 
 
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="alert alert-info">اجرای عملیات بلاک جمعی اکانت‌های ناامن، به صورت اتوماتیک و حدود ۵ دقیقه بعد از ثبت‌نام آغاز می‌شود</div>
+}
 <div class="jumbotron">
     <h1 class="display-4">رُستَم بات</h1>
     <p class="lead">رستم، پهلوان افسانه‌ای ایران برگشته تا به جنگ دیوهای فضای مجازی برود!</p>
