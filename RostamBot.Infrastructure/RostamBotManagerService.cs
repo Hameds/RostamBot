@@ -78,7 +78,7 @@ namespace RostamBot.Infrastructure
 
                         if (directMessageUrl.Contains("twitter.com") && directMessageUrl.Contains("status"))
                         {
-                            var reportedTweetId = (long)Convert.ToDouble(directMessageUrl.Split('/').Last());
+                            var reportedTweetId = long.Parse(directMessageUrl.Split('/').Last());
                             var reportedTweet = Tweet.GetTweet(reportedTweetId);
 
                             if (reportedTweet != null)

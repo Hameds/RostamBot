@@ -18,6 +18,11 @@ namespace RostamBot.Application.Infrastructure.Hangfire
         {
             var httpContext = context.GetHttpContext();
 
+            if (httpContext.User.IsInRole(_configuration["RostamBotSettings:DefaultAdminRole"]))
+            {
+                return true;
+            }
+
             var header = httpContext.Request.Headers["Authorization"];
 
             if (string.IsNullOrWhiteSpace(header))

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>8C2EA3FA-042E-4EC6-87DB-3057F7FE61AB</UserSecretsId>
-    <Version>0.2.0</Version>
+    <Version>0.3.1</Version>
     <Authors>Hamed Saeedi</Authors>
     <Company>RostamBot.Web</Company>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
