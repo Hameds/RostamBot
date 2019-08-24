@@ -10,10 +10,16 @@ namespace RostamBot.Infrastructure
 {
     public class NotificationService : INotificationService
     {
+        public Task SendRespondDirectAsync(RespondDirect direct)
+        {
+            BackgroundJob.Enqueue<IRostamBotManagerService>(bot => bot.SendReplyDirect(direct));
+
+            return Task.CompletedTask;
+        }
 
         public Task SendRespondTweetAsync(RespondTweet tweet)
         {
-            BackgroundJob.Enqueue<IRostamBotManagerService>(bot => bot.SendReply(tweet));
+            BackgroundJob.Enqueue<IRostamBotManagerService>(bot => bot.SendReplyTweet(tweet));
 
             return Task.CompletedTask;
         }

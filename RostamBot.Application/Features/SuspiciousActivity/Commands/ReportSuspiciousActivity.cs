@@ -1,4 +1,4 @@
-﻿ using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RostamBot.Application.Interfaces;
 using RostamBot.Domain.Entities;
@@ -27,6 +27,8 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
         public long SuspiciousTweetId { get; set; }
 
         public string SuspiciousTweetContent { get; set; }
+
+        public bool IsViaDirect { get; set; }
 
 
         public class Handler : IRequestHandler<ReportSuspiciousActivity, Unit>
@@ -57,7 +59,9 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
                         ReporterTweetId = request.ReporterTweetId,
                         IsSuspiciousAccountBlocked = suspiciousAccount.ShouldBlock,
                         SuspiciousAccountScreenName = request.SuspiciousAccountTwitterScreenName,
-                        ReporterScreenName = request.ReporterTwitterScreenName
+                        ReporterScreenName = request.ReporterTwitterScreenName,
+                        ShouldRespondViaDirect = request.IsViaDirect,
+                        ReporterTwitterUserId = request.ReporterTwitterUserId
                     },
                     cancellationToken);
 
@@ -104,7 +108,8 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
                     ReporterId = reporter.Id,
                     SuspiciousAccountId = suspiciousAccount.Id,
                     TweetId = request.ReporterTweetId,
-                    TweetContent = request.ReporterTweetContent
+                    TweetContent = request.ReporterTweetContent,
+                    IsViaDirect = request.IsViaDirect
                 };
 
                 await _db.SuspiciousAccountReports.AddAsync(suspiciousAccountReport);

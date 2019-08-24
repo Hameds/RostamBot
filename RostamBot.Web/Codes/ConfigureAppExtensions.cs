@@ -37,7 +37,8 @@ namespace RostamBot.Web.Codes
             GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 2, DelaysInSeconds = new int[] { 1200, 1200 } });
             app.UseHangfireServer();
 
-            RecurringJob.AddOrUpdate<ISyncMentionsJob>(job => job.GetMentionsAsync(), Cron.Hourly());
+            RecurringJob.AddOrUpdate<ISyncReportsJob>(job => job.GetMentionsAsync(), Cron.MinuteInterval(20));
+            RecurringJob.AddOrUpdate<ISyncReportsJob>(job => job.GetDirectsAsync(), Cron.MinuteInterval(20));
 
 
             return app;

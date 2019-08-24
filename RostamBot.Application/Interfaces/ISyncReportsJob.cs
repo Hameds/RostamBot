@@ -2,8 +2,10 @@
 
 namespace RostamBot.Application.Interfaces
 {
-    public interface ISyncMentionsJob
+    public interface ISyncReportsJob
     {
         Task GetMentionsAsync();
+
+        Task GetDirectsAsync();
     }
 }

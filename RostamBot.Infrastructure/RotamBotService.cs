@@ -16,17 +16,17 @@ namespace RostamBot.Infrastructure
         public RostamBotService(IOptions<RostamBotSettings> settings)
         {
             _settings = settings.Value;
-        }
 
-        public Dictionary<SuspiciousAccountDto, bool> BlockUsers(string userAccessToken, string userAccessSecret, List<SuspiciousAccountDto> suspiciousAccountsToBlock, bool shouldBlock)
-        {
-            //ToDo: should refator this to Utility Method
             if (!string.IsNullOrEmpty(_settings.TwitterProxy))
             {
                 TweetinviConfig.ApplicationSettings.ProxyConfig = new ProxyConfig(_settings.TwitterProxy);
                 TweetinviConfig.CurrentThreadSettings.ProxyConfig = new ProxyConfig(_settings.TwitterProxy);
             }
 
+        }
+
+        public Dictionary<SuspiciousAccountDto, bool> BlockUsers(string userAccessToken, string userAccessSecret, List<SuspiciousAccountDto> suspiciousAccountsToBlock, bool shouldBlock)
+        {
 
             Auth.SetUserCredentials(
                                     _settings.TwitterAppConsumerKey,

@@ -172,7 +172,7 @@ namespace RostamBot.Web.Codes
             services.AddTransient<IRostamBotManagerService, RostamBotManagerService>();
             services.AddTransient<IRostamBotService, RostamBotService>();
 
-            services.AddScoped<ISyncMentionsJob, SyncMentionsJob>();
+            services.AddScoped<ISyncReportsJob, SyncReportsJob>();
             services.AddScoped<ISyncBlockListJob, SyncBlockListJob>();
 
 
