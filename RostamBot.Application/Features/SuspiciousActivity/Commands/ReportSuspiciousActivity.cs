@@ -51,19 +51,24 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
 
                 await GetOrAddSuspiciousTweet(request, reporter, suspiciousAccount, cancellationToken);
 
-                await CreateNewSuspiciousAccountReport(request, reporter, suspiciousAccount, cancellationToken);
+                var suspiciousAccountReport = await _db.SuspiciousAccountReports.SingleOrDefaultAsync(x => x.TweetId == request.ReporterTweetId && x.IsViaDirect == request.IsViaDirect);
 
-                await _mediator.Publish(
-                    new SuspiciousAccountReportSaved
-                    {
-                        ReporterTweetId = request.ReporterTweetId,
-                        IsSuspiciousAccountBlocked = suspiciousAccount.ShouldBlock,
-                        SuspiciousAccountScreenName = request.SuspiciousAccountTwitterScreenName,
-                        ReporterScreenName = request.ReporterTwitterScreenName,
-                        ShouldRespondViaDirect = request.IsViaDirect,
-                        ReporterTwitterUserId = request.ReporterTwitterUserId
-                    },
-                    cancellationToken);
+                if (suspiciousAccountReport == null)
+                {
+                    await CreateNewSuspiciousAccountReport(request, reporter, suspiciousAccount, cancellationToken);
+
+                    await _mediator.Publish(
+                        new SuspiciousAccountReportSaved
+                        {
+                            ReporterTweetId = request.ReporterTweetId,
+                            IsSuspiciousAccountBlocked = suspiciousAccount.ShouldBlock,
+                            SuspiciousAccountScreenName = request.SuspiciousAccountTwitterScreenName,
+                            ReporterScreenName = request.ReporterTwitterScreenName,
+                            ShouldRespondViaDirect = request.IsViaDirect,
+                            ReporterTwitterUserId = request.ReporterTwitterUserId
+                        },
+                        cancellationToken);
+                }
 
                 return Unit.Value;
             }
