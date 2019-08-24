@@ -2,7 +2,7 @@
 
 namespace RostamBot.Application.Features.SuspiciousActivity.Models
 {
-    public class MentionDto
+    public class ReportDto
     {
         public long ReporterTwitterUserId { get; set; }
 
@@ -21,5 +21,7 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Models
         public long SuspiciousTweetId { get; set; }
 
         public string SuspiciousTweetContent { get; set; }
+
+        public bool IsDirectMessage { get; set; }
     }
 }

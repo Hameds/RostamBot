@@ -1,4 +1,4 @@
-﻿ using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RostamBot.Application.Interfaces;
 using RostamBot.Domain.Entities;
@@ -28,6 +28,8 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
 
         public string SuspiciousTweetContent { get; set; }
 
+        public bool IsViaDirect { get; set; }
+
 
         public class Handler : IRequestHandler<ReportSuspiciousActivity, Unit>
         {
@@ -49,17 +51,24 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
 
                 await GetOrAddSuspiciousTweet(request, reporter, suspiciousAccount, cancellationToken);
 
-                await CreateNewSuspiciousAccountReport(request, reporter, suspiciousAccount, cancellationToken);
+                var suspiciousAccountReport = await _db.SuspiciousAccountReports.SingleOrDefaultAsync(x => x.TweetId == request.ReporterTweetId && x.IsViaDirect == request.IsViaDirect);
 
-                await _mediator.Publish(
-                    new SuspiciousAccountReportSaved
-                    {
-                        ReporterTweetId = request.ReporterTweetId,
-                        IsSuspiciousAccountBlocked = suspiciousAccount.ShouldBlock,
-                        SuspiciousAccountScreenName = request.SuspiciousAccountTwitterScreenName,
-                        ReporterScreenName = request.ReporterTwitterScreenName
-                    },
-                    cancellationToken);
+                if (suspiciousAccountReport == null)
+                {
+                    await CreateNewSuspiciousAccountReport(request, reporter, suspiciousAccount, cancellationToken);
+
+                    await _mediator.Publish(
+                        new SuspiciousAccountReportSaved
+                        {
+                            ReporterTweetId = request.ReporterTweetId,
+                            IsSuspiciousAccountBlocked = suspiciousAccount.ShouldBlock,
+                            SuspiciousAccountScreenName = request.SuspiciousAccountTwitterScreenName,
+                            ReporterScreenName = request.ReporterTwitterScreenName,
+                            ShouldRespondViaDirect = request.IsViaDirect,
+                            ReporterTwitterUserId = request.ReporterTwitterUserId
+                        },
+                        cancellationToken);
+                }
 
                 return Unit.Value;
             }
@@ -104,7 +113,8 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
                     ReporterId = reporter.Id,
                     SuspiciousAccountId = suspiciousAccount.Id,
                     TweetId = request.ReporterTweetId,
-                    TweetContent = request.ReporterTweetContent
+                    TweetContent = request.ReporterTweetContent,
+                    IsViaDirect = request.IsViaDirect
                 };
 
                 await _db.SuspiciousAccountReports.AddAsync(suspiciousAccountReport);

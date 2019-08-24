@@ -6,8 +6,13 @@ namespace RostamBot.Application.Interfaces
 {
     public interface IRostamBotManagerService
     {
-        List<MentionDto> GetMentions(long lastProcessedTweetId);
+        List<ReportDto> GetMentions(long lastProcessedTweetId);
 
-        void SendReply(RespondTweet tweet);
+        List<ReportDto> GetDirectMessages();
+
+        void SendReplyTweet(RespondTweet tweet);
+
+        void SendReplyDirect(RespondDirect tweet);
+
     }
 }

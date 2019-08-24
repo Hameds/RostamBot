@@ -16,6 +16,8 @@ namespace RostamBot.Domain.Entities
 
         public string TweetContent { get; set; }
 
+        public bool IsViaDirect { get; set; }
+
 
 
 

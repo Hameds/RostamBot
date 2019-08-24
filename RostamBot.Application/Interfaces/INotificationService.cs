@@ -8,6 +8,8 @@ namespace RostamBot.Application.Interfaces
     {
         Task SendRespondTweetAsync(RespondTweet tweet);
 
+        Task SendRespondDirectAsync(RespondDirect direct);
+
         Task UpdateBlockList(SuspiciousAccountDto suspiciousAccount, bool shouldBlock);
     }
 }
