@@ -35,7 +35,8 @@ namespace RostamBot.Application.Jobs
                     SuspiciousAccountTwitterUserId = direct.SuspiciousAccountTwitterUserId,
                     SuspiciousAccountTwitterUserJoinDate = direct.SuspiciousAccountTwitterUserJoinDate,
                     SuspiciousTweetContent = direct.SuspiciousTweetContent,
-                    SuspiciousTweetId = direct.SuspiciousTweetId
+                    SuspiciousTweetId = direct.SuspiciousTweetId,
+                    IsViaDirect = true
                 };
 
                 await _mediator.Send(newReport);
@@ -63,7 +64,8 @@ namespace RostamBot.Application.Jobs
                     SuspiciousAccountTwitterUserId = mention.SuspiciousAccountTwitterUserId,
                     SuspiciousAccountTwitterUserJoinDate = mention.SuspiciousAccountTwitterUserJoinDate,
                     SuspiciousTweetContent = mention.SuspiciousTweetContent,
-                    SuspiciousTweetId = mention.SuspiciousTweetId
+                    SuspiciousTweetId = mention.SuspiciousTweetId,
+                    IsViaDirect = false
                 };
 
                 await _mediator.Send(newReport);
