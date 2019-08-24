@@ -51,9 +51,9 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
 
                 await GetOrAddSuspiciousTweet(request, reporter, suspiciousAccount, cancellationToken);
 
-                var suspiciousAccountReport = await _db.SuspiciousAccountReports.SingleOrDefaultAsync(x => x.TweetId == request.ReporterTweetId && x.IsViaDirect == request.IsViaDirect);
+                var suspiciousAccountReportExists = await _db.SuspiciousAccountReports.AnyAsync(x => x.TweetId == request.ReporterTweetId && x.IsViaDirect == request.IsViaDirect && x.ReporterId == reporter.Id);
 
-                if (suspiciousAccountReport == null)
+                if (!suspiciousAccountReportExists)
                 {
                     await CreateNewSuspiciousAccountReport(request, reporter, suspiciousAccount, cancellationToken);
 
@@ -75,11 +75,11 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
 
             private async Task GetOrAddSuspiciousTweet(ReportSuspiciousActivity request, Reporter reporter, SuspiciousAccount suspiciousAccount, CancellationToken cancellationToken)
             {
-                var suspiciousTweet = await _db.SuspiciousTweets.SingleOrDefaultAsync(x => x.TweetId == request.SuspiciousTweetId);
+                var suspiciousTweetExists = await _db.SuspiciousTweets.AnyAsync(x => x.TweetId == request.SuspiciousTweetId && x.ReporterId == reporter.Id);
 
-                if (suspiciousTweet == null)
+                if (!suspiciousTweetExists)
                 {
-                    suspiciousTweet = await CreateNewSuspiciousTweet(request, reporter, suspiciousAccount, cancellationToken);
+                    await CreateNewSuspiciousTweet(request, reporter, suspiciousAccount, cancellationToken);
                 }
             }
 
