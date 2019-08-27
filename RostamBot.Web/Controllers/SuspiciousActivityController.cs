@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RostamBot.Application.Features.SuspiciousActivity.Commands;
+using RostamBot.Application.Features.SuspiciousActivity.Models;
+using RostamBot.Application.Features.SuspiciousActivity.Queries;
 using RostamBot.Application.Settings;
 using System.Threading.Tasks;
 using Tweetinvi;
@@ -28,6 +30,7 @@ namespace RostamBot.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddSuspiciousTwitterAccount([FromBody]string twitterScreenName)
         {
+            //ToDo: remove this to RostamBotManagerService
             TweetinviConfig.ApplicationSettings.ProxyConfig = new ProxyConfig(_settings.TwitterProxy);
             TweetinviConfig.CurrentThreadSettings.ProxyConfig = new ProxyConfig(_settings.TwitterProxy);
 
@@ -54,5 +57,21 @@ namespace RostamBot.Web.Controllers
             return Ok(await Mediator.Send(addSuspiciousAccount));
         }
 
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        public async Task<ActionResult<BlockedAccountsListViewModel>> GetTwitterBlockList([FromQuery] GetTwitterBlockList model)
+        {
+            return Ok(await Mediator.Send(model));
+        }
+
+        [HttpGet("{twitterScreenName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        public async Task<ActionResult<bool>> IsTwitterUserBlocked(string twitterScreenName)
+        {
+            return Ok(await Mediator.Send(new IsUserBlocked { TwitterScreenName = twitterScreenName }));
+        }
     }
 }

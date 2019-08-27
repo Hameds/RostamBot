@@ -65,7 +65,7 @@ namespace RostamBot.Infrastructure
             {
                 var rostamBotUser = User.GetUserFromScreenName("RostamBot");
 
-                var messagesWithUrl = messages.Where(x => x.SenderId != rostamBotUser.Id && x.Entities.Urls.Count == 1);
+                var messagesWithUrl = messages.Where(x => x.SenderId != rostamBotUser.Id && x.Entities != null && x.Entities.Urls != null && x.Entities.Urls.Count == 1).ToList();
 
                 foreach (var directMessage in messagesWithUrl)
                 {
@@ -109,6 +109,7 @@ namespace RostamBot.Infrastructure
 
                 }
             }
+
 
             return model;
 

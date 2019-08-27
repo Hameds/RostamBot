@@ -54,7 +54,7 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
                     {
                         InReplyToTweetId = notification.ReporterTweetId,
                         InReplyToScreenName = notification.ReporterScreenName,
-                        Text = respondText,
+                        Text = respondText + " همچنین می‌توانید گزارشات خود را با ارسال توییت اکانت ناامن به صورت دایرکت به ما و بدون نیاز به هشتگ بفرستید."
                     };
 
                     await _notification.SendRespondTweetAsync(respondTweet);
