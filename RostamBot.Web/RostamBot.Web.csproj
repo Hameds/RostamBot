@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>8C2EA3FA-042E-4EC6-87DB-3057F7FE61AB</UserSecretsId>
-    <Version>0.3.3</Version>
+    <Version>0.3.4</Version>
     <Authors>Hamed Saeedi</Authors>
     <Company>RostamBot.Web</Company>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
@@ -21,7 +21,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
-    <PackageReference Include="TweetinviAPI" Version="4.0.1" />
   </ItemGroup>
 
 

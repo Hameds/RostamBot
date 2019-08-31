@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using RostamBot.Application.Features.SuspiciousActivity.Models;
 using RostamBot.Application.Interfaces;
 using RostamBot.Domain.Entities;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,25 +13,30 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
     {
         public string TwitterScreenName { get; set; }
 
-        public long TwitterUserId { get; set; }
-
-        public DateTime TwitterJoinDate { get; set; }
 
         public class Handler : IRequestHandler<AddSuspiciousAccount, Unit>
         {
             private readonly IRostamBotDbContext _db;
+            private readonly IRostamBotManagerService _rostamBotManagerService;
             private readonly IMediator _mediator;
 
 
-            public Handler(IRostamBotDbContext db, IMediator mediator)
+            public Handler(IRostamBotDbContext db,
+                IRostamBotManagerService rostamBotManagerService,
+                IMediator mediator)
             {
                 _db = db;
+                _rostamBotManagerService = rostamBotManagerService;
                 _mediator = mediator;
             }
 
             public async Task<Unit> Handle(AddSuspiciousAccount request, CancellationToken cancellationToken)
             {
-                if (await _db.SuspiciousAccounts.AnyAsync(x => x.TwitterUserId == request.TwitterUserId))
+
+                var twitterUserInfo = _rostamBotManagerService.GetSuspiciousAccountInfo(request.TwitterScreenName);
+
+
+                if (await _db.SuspiciousAccounts.AnyAsync(x => x.TwitterUserId == twitterUserInfo.TwitterUserId))
                 {
                     throw new AppException($"{request.TwitterScreenName} is already in block list");
                 }
@@ -40,9 +44,9 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
                 var newSuspiciousAccount = new SuspiciousAccount()
                 {
                     ShouldBlock = true,
-                    TwitterJoinDate = request.TwitterJoinDate,
-                    TwitterScreenName = request.TwitterScreenName,
-                    TwitterUserId = request.TwitterUserId
+                    TwitterJoinDate = twitterUserInfo.TwitterJoinDate,
+                    TwitterScreenName = twitterUserInfo.TwitterScreenName,
+                    TwitterUserId = twitterUserInfo.TwitterUserId
                 };
 
                 await _db.SuspiciousAccounts.AddAsync(newSuspiciousAccount);
@@ -52,13 +56,15 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
                 var suspiciousAccountDto = new SuspiciousAccountDto()
                 {
                     Id = newSuspiciousAccount.Id,
-                    TwitterUserId = newSuspiciousAccount.TwitterUserId
+                    TwitterUserId = newSuspiciousAccount.TwitterUserId,
+                    TwitterScreenName = newSuspiciousAccount.TwitterScreenName,
+                    TwitterJoinDate = newSuspiciousAccount.TwitterJoinDate
                 };
 
                 await _mediator.Publish(
                     new ChangeBlockStatusSaved
                     {
-                        SuspiciousAccountDto = suspiciousAccountDto,
+                        SuspiciousAccountDto = twitterUserInfo,
                         BlockStatus = true
                     },
                     cancellationToken);

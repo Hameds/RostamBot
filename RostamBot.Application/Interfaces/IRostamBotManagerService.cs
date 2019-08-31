@@ -14,5 +14,7 @@ namespace RostamBot.Application.Interfaces
 
         void SendReplyDirect(RespondDirect tweet);
 
+        SuspiciousAccountDto GetSuspiciousAccountInfo(string twitterScreenName);
+
     }
 }
