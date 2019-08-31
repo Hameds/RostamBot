@@ -164,6 +164,22 @@ namespace RostamBot.Infrastructure
 
         }
 
+        public SuspiciousAccountDto GetSuspiciousAccountInfo(string twitterScreenName)
+        {
+
+            var twitterUser = User.GetUserFromScreenName(twitterScreenName);
+
+            if (twitterUser == null)
+                throw new Exception($"Couldn't find {twitterScreenName}");
+
+            return new SuspiciousAccountDto
+            {
+                TwitterUserId = twitterUser.Id,
+                TwitterJoinDate = twitterUser.CreatedAt,
+                TwitterScreenName = twitterUser.ScreenName
+            };
+        }
+
         public void SendReplyDirect(RespondDirect direct)
         {
             BackgroundJob.Enqueue(() =>

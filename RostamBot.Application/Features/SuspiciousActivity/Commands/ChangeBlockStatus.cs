@@ -46,7 +46,9 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
                 var suspiciousAccountDto = new SuspiciousAccountDto()
                 {
                     Id = suspiciousAccount.Id,
-                    TwitterUserId = suspiciousAccount.TwitterUserId
+                    TwitterUserId = suspiciousAccount.TwitterUserId,
+                    TwitterScreenName = suspiciousAccount.TwitterScreenName,
+                    TwitterJoinDate = suspiciousAccount.TwitterJoinDate
                 };
 
                 await _mediator.Publish(

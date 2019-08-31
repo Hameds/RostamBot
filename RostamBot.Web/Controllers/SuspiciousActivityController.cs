@@ -9,7 +9,6 @@ using RostamBot.Application.Features.SuspiciousActivity.Models;
 using RostamBot.Application.Features.SuspiciousActivity.Queries;
 using RostamBot.Application.Settings;
 using System.Threading.Tasks;
-using Tweetinvi;
 
 namespace RostamBot.Web.Controllers
 {
@@ -30,29 +29,10 @@ namespace RostamBot.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddSuspiciousTwitterAccount([FromBody]string twitterScreenName)
         {
-            //ToDo: remove this to RostamBotManagerService
-            TweetinviConfig.ApplicationSettings.ProxyConfig = new ProxyConfig(_settings.TwitterProxy);
-            TweetinviConfig.CurrentThreadSettings.ProxyConfig = new ProxyConfig(_settings.TwitterProxy);
-
-
-            var userCredentials = Auth.SetUserCredentials(
-              _settings.ManagerTwitterAppConsumerKey,
-              _settings.ManagerTwitterAppConsumerSecret,
-              _settings.ManagerTwitterAppUserAccessToken,
-              _settings.ManagerTwitterAppUserAccessSecret);
-
-            var suspiciousTwitterAccount = Tweetinvi.User.GetUserFromScreenName(twitterScreenName);
-
-            if (suspiciousTwitterAccount == null)
-            {
-                return BadRequest();
-            }
 
             var addSuspiciousAccount = new AddSuspiciousAccount()
             {
-                TwitterJoinDate = suspiciousTwitterAccount.CreatedAt,
-                TwitterScreenName = suspiciousTwitterAccount.ScreenName,
-                TwitterUserId = suspiciousTwitterAccount.Id
+                TwitterScreenName = twitterScreenName,
             };
             return Ok(await Mediator.Send(addSuspiciousAccount));
         }

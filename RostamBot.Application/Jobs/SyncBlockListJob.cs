@@ -36,7 +36,7 @@ namespace RostamBot.Application.Jobs
 
             var currentBlockedList = await _db.SuspiciousAccounts
                                                                 .Where(x => x.ShouldBlock.HasValue && x.ShouldBlock.Value)
-                                                                .Select(x => new SuspiciousAccountDto { Id = x.Id, TwitterUserId = x.TwitterUserId })
+                                                                .Select(x => new SuspiciousAccountDto { Id = x.Id, TwitterUserId = x.TwitterUserId, TwitterScreenName = x.TwitterScreenName, TwitterJoinDate = x.TwitterJoinDate })
                                                                 .ToListAsync();
             await ApplyBlockListAndLog(rostamBotUser, currentBlockedList, shouldBlock: true, cancellationToken);
 
