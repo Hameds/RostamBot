@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using RostamBot.Application.Interfaces;
 using RostamBot.Domain.Entities;
@@ -35,12 +36,14 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
         {
             private readonly IRostamBotDbContext _db;
             private readonly IMediator _mediator;
+            private readonly IHostingEnvironment _env;
 
 
-            public Handler(IRostamBotDbContext db, IMediator mediator)
+            public Handler(IRostamBotDbContext db, IMediator mediator, IHostingEnvironment env)
             {
                 _db = db;
                 _mediator = mediator;
+                _env = env;
             }
 
             public async Task<Unit> Handle(ReportSuspiciousActivity request, CancellationToken cancellationToken)
@@ -57,7 +60,10 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
                 {
                     await CreateNewSuspiciousAccountReport(request, reporter, suspiciousAccount, cancellationToken);
 
-                    await _mediator.Publish(
+                    // We reply to users only in Production Environment
+                    if (_env.IsProduction())
+                    {
+                        await _mediator.Publish(
                         new SuspiciousAccountReportSaved
                         {
                             ReporterTweetId = request.ReporterTweetId,
@@ -68,6 +74,8 @@ namespace RostamBot.Application.Features.SuspiciousActivity.Commands
                             ReporterTwitterUserId = request.ReporterTwitterUserId
                         },
                         cancellationToken);
+                    }
+
                 }
 
                 return Unit.Value;
