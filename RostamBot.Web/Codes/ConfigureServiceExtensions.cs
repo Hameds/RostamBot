@@ -1,9 +1,17 @@
-﻿using Araye.Code.Cqrs.WebApi;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Text;
+using Araye.Code.Cqrs.WebApi;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Hangfire;
 using Hangfire.SqlServer;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
@@ -22,13 +30,6 @@ using RostamBot.Domain.Entities;
 using RostamBot.Infrastructure;
 using RostamBot.Persistence;
 using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Reflection;
-using System.Text;
 
 namespace RostamBot.Web.Codes
 {
@@ -113,21 +114,30 @@ namespace RostamBot.Web.Codes
                 .AddEntityFrameworkStores<RostamBotDbContext>()
                 .AddDefaultTokenProviders();
 
+
+            void twitterOptions(TwitterOptions options)
+            {
+                options.SaveTokens = true;
+                options.ConsumerKey = configuration["RostamBotSettings:TwitterAppConsumerKey"];
+                options.ConsumerSecret = configuration["RostamBotSettings:TwitterAppConsumerSecret"];
+
+                if (!string.IsNullOrEmpty(configuration["RostamBotSettings:TwitterProxy"]))
+                {
+                    options.BackchannelHttpHandler = new HttpClientHandler()
+                    {
+                        Proxy = new WebProxy(configuration["RostamBotSettings:TwitterProxy"])
+                    };
+                }
+            }
+
+
+
             services.AddAuthentication()
                     .AddCookie(cookieOptions =>
                     {
                         cookieOptions.Cookie.Name = "RostamBotCookie";
                     })
-                    .AddTwitter(twitterOptions =>
-                    {
-                        twitterOptions.SaveTokens = true;
-                        twitterOptions.ConsumerKey = configuration["RostamBotSettings:TwitterAppConsumerKey"];
-                        twitterOptions.ConsumerSecret = configuration["RostamBotSettings:TwitterAppConsumerSecret"];
-                        twitterOptions.BackchannelHttpHandler = new HttpClientHandler()
-                        {
-                            Proxy = new WebProxy(configuration["RostamBotSettings:TwitterProxy"])
-                        };
-                    })
+                    .AddTwitter(twitterOptions)
                     .AddJwtBearer(config =>
                     {
                         config.RequireHttpsMetadata = false;
